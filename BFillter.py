@@ -2,6 +2,7 @@ l=31
 h1=[]
 h2=[]
 h3=[]
+filename='fruits.txt'
 for i in range(l):
     h1.append(0)
     h2.append(0)
@@ -34,7 +35,7 @@ def hash3(n,u):
             return 1
     return 0
 
-def bfil(s=[]):
+def bfil(s):
     h=0
     for i in range(len(s)):
             h=l*h+ord(s[i])
@@ -44,44 +45,52 @@ def bfil(s=[]):
                 return 1
     return 0
 
-def cnum(dic=[]):
-    i=0
-    j=0
+def cnum(word):
     h=0
-    for j in range(len(dic)):
-        for i in range(len(dic[j])):
-            h=l*h+ord(dic[j][i])
+    for letter in word:
+        h=l*h+ord(letter)   #ord(x) Returns integer value of x
     hash1(h,0)
     hash2(h,0)
     hash3(h,0)
 
 try:
     while 1:
-        n=input("\t\tBloom Filter\n\n1.Show Content\n2.Add Item\n3.Search String\n4.Exit\n\nEnter your choice: ")
-        if n==1:
-            file=open("fruits.txt")
-            print(file.read())
-            file.close()
-        elif n==2:
-            file=open("fruits.txt","a")
-            s=raw_input("Enter name of item: ")
-            file.write("\n%s"%(s))
-            print("Item Added")
-            file.close()
-        elif n==3:
-            file=open("fruits.txt")
-            fname=file.readlines()
-            cnum(fname)
-            s=raw_input("Enter string to search: ")
-            c=bfil(s)
-            if c==1:
-                print("\nString may be available.\n")
+        try:
+            n=int(input("\t\tBloom Filter\n1.Add Item\n2.Search String\n3.Show Content\n4.Flush file\n5.Exit\n\nEnter your choice: "))
+            if n==1:
+                file=open(filename,"a")
+                s=input("Enter name of item: ")
+                file.write(f'\n{s}')
+                cnum(s)
+                print("Item Added")
+                file.close()
+            elif n==2:
+                s=input("Enter string to search: ")
+                if bfil(s):
+                    print("\nString may be available.\n")
+                else:
+                    print("\nString is not available.\n")
+                file.close()
+            elif n==3:
+                try:
+                    file=open(filename)
+                    print(file.read())
+                    file.close()
+                except:
+                    print('No content to show yet!!!')
+            elif n==4:
+                try:
+                    file=open(filename,'w')
+                    file.close()
+                    print('File Flushed.')
+                except:
+                    print("File don't exist yet!!!")    
+            elif n==5:
+                 break;
             else:
-                print("\nString is not available.\n")
-            file.close()    
-        elif n==4:
-             break;
-        else:
-            print("\nWrong Choice!!")
+                print("\nEnter your CHOICE correctly!!!\n")
+        except:
+            print('\nEnter your CHOICE correctly!!!\n')
 finally:
+    file=open(filename)
     file.close();
